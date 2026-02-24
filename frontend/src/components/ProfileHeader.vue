@@ -29,7 +29,7 @@
         <h1 class="text-3xl font-extrabold tracking-tight text-pink-600 sm:text-4xl lg:text-5xl" style="font-family: 'Pacifico', cursive;">
           Eunice B. Nipas
         </h1>
-        <p class="mt-2 text-lg font-bold text-pink-400">✿ Welcome to my little corner of the internet ✿</p>
+        <p class="mt-2 text-lg font-bold text-pink-400">✿ Welcome to my final project in webprog ✿</p>
       </div>
     </div>
   </section>
