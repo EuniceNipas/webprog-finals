@@ -1,24 +1,4 @@
 <script setup>
-import { ref } from 'vue'
-import api from '../api'
-
-const form = ref({ name: '', email: '', message: '' })
-const status = ref('idle') // idle | sending | success | error
-const errorMsg = ref('')
-
-async function submit() {
-  status.value = 'sending'
-  errorMsg.value = ''
-  try {
-    await api.post('/contact', form.value)
-    status.value = 'success'
-    form.value = { name: '', email: '', message: '' }
-  } catch (e) {
-    status.value = 'error'
-    errorMsg.value = e.response?.data?.message || 'Something went wrong.'
-  }
-}
-
 const socials = [
   {
     name: 'Facebook',
@@ -74,91 +54,6 @@ const socials = [
         />
         <span class="text-xs font-bold text-pink-500 group-hover:text-pink-600 transition-colors">{{ social.name }}</span>
       </a>
-    </div>
-
-    <!-- Contact form -->
-    <div class="mt-10">
-      <!-- Success banner -->
-      <div
-        v-if="status === 'success'"
-        class="kawaii-card p-6 text-center"
-      >
-        <p class="text-lg font-bold text-pink-500">💕 Thanks for reaching out! I'll get back to you soon~ ♡</p>
-      </div>
-
-      <form
-        v-else
-        @submit.prevent="submit"
-        class="kawaii-card p-6 sm:p-8 space-y-5"
-      >
-        <!-- Name -->
-        <div>
-          <label for="contact-name" class="mb-1.5 block text-sm font-bold text-pink-400">
-            ♡ Name
-          </label>
-          <input
-            id="contact-name"
-            v-model="form.name"
-            required
-            type="text"
-            placeholder="Your name"
-            class="w-full rounded-2xl border-2 border-pink-200 bg-pink-50/50 px-5 py-3 text-sm font-medium text-gray-700 placeholder-pink-300 outline-none transition-all duration-300 focus:border-pink-400 focus:bg-white focus:shadow-md focus:shadow-pink-200/50"
-          />
-        </div>
-
-        <!-- Email -->
-        <div>
-          <label for="contact-email" class="mb-1.5 block text-sm font-bold text-pink-400">
-            ♡ Email
-          </label>
-          <input
-            id="contact-email"
-            v-model="form.email"
-            required
-            type="email"
-            placeholder="you@example.com"
-            class="w-full rounded-2xl border-2 border-pink-200 bg-pink-50/50 px-5 py-3 text-sm font-medium text-gray-700 placeholder-pink-300 outline-none transition-all duration-300 focus:border-pink-400 focus:bg-white focus:shadow-md focus:shadow-pink-200/50"
-          />
-        </div>
-
-        <!-- Message -->
-        <div>
-          <label for="contact-message" class="mb-1.5 block text-sm font-bold text-pink-400">
-            ♡ Message
-          </label>
-          <textarea
-            id="contact-message"
-            v-model="form.message"
-            required
-            rows="4"
-            placeholder="Write your message~ ✨"
-            class="w-full resize-none rounded-2xl border-2 border-pink-200 bg-pink-50/50 px-5 py-3 text-sm font-medium text-gray-700 placeholder-pink-300 outline-none transition-all duration-300 focus:border-pink-400 focus:bg-white focus:shadow-md focus:shadow-pink-200/50"
-          />
-        </div>
-
-        <!-- Error -->
-        <p v-if="status === 'error'" class="text-sm font-medium text-red-400">{{ errorMsg }}</p>
-
-        <!-- Submit -->
-        <div class="text-center">
-          <button
-            type="submit"
-            :disabled="status === 'sending'"
-            class="btn-bubble inline-flex items-center gap-2 px-8 py-3 text-base disabled:opacity-50"
-          >
-            <svg
-              v-if="status === 'sending'"
-              class="h-4 w-4 animate-spin"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-            </svg>
-            {{ status === 'sending' ? 'Sending~ ✨' : '♡ Send Message ♡' }}
-          </button>
-        </div>
-      </form>
     </div>
   </section>
 </template>
