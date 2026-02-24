@@ -17,6 +17,18 @@
   background: #f472b6;
 }
 
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1e1b2e;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #7c3aed;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}
+
 /* ── Smooth scroll ────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
@@ -66,6 +78,12 @@ html {
 .btn-bubble:hover {
   @apply bg-pink-500 shadow-lg shadow-pink-300/40 -translate-y-0.5;
 }
+.dark .btn-bubble {
+  @apply bg-purple-500;
+}
+.dark .btn-bubble:hover {
+  @apply bg-purple-400 shadow-purple-500/40;
+}
 
 /* ── Kawaii card ──────────────────────────────────────────────── */
 .kawaii-card {
@@ -73,5 +91,11 @@ html {
 }
 .kawaii-card:hover {
   @apply shadow-xl shadow-pink-200/60 -translate-y-1 border-pink-300;
+}
+.dark .kawaii-card {
+  @apply border-purple-500/30 bg-gray-900/80 shadow-purple-900/30;
+}
+.dark .kawaii-card:hover {
+  @apply shadow-purple-500/30 border-purple-400/50;
 }
 

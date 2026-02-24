@@ -8,7 +8,7 @@ const skills = [
 
 <template>
   <section>
-    <h2 class="text-center text-2xl font-extrabold text-pink-500 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+    <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
       ✿ Skills ✿
     </h2>
 
@@ -17,7 +17,7 @@ const skills = [
         v-for="skill in skills"
         :key="skill.name"
         :class="skill.border"
-        class="group flex flex-col items-center gap-3 rounded-3xl border-2 bg-white/80 p-6 shadow-lg shadow-pink-100/50 transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-300/50 cursor-pointer min-w-[140px]"
+        class="group flex flex-col items-center gap-3 rounded-3xl border-2 bg-white/80 dark:bg-gray-900/80 dark:border-purple-500/30 p-6 shadow-lg shadow-pink-100/50 dark:shadow-purple-900/30 transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-300/50 dark:hover:shadow-purple-500/30 cursor-pointer min-w-[140px]"
       >
         <!-- Icon badge -->
         <div
@@ -28,15 +28,15 @@ const skills = [
         </div>
 
         <!-- Name -->
-        <span class="text-sm font-extrabold text-pink-600 group-hover:text-pink-700 transition-colors">
+        <span class="text-sm font-extrabold text-pink-600 dark:text-purple-300 group-hover:text-pink-700 dark:group-hover:text-purple-200 transition-colors">
           {{ skill.name }}
         </span>
 
         <!-- Decorative dots -->
         <div class="flex gap-1">
-          <div class="h-1.5 w-1.5 rounded-full bg-pink-300 transition-all duration-300 group-hover:bg-pink-500" />
-          <div class="h-1.5 w-1.5 rounded-full bg-pink-200 transition-all duration-300 group-hover:bg-pink-400" style="transition-delay: 0.1s" />
-          <div class="h-1.5 w-1.5 rounded-full bg-pink-100 transition-all duration-300 group-hover:bg-pink-300" style="transition-delay: 0.2s" />
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-300 dark:bg-purple-400 transition-all duration-300 group-hover:bg-pink-500 dark:group-hover:bg-purple-300" />
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-200 dark:bg-purple-500 transition-all duration-300 group-hover:bg-pink-400 dark:group-hover:bg-purple-400" style="transition-delay: 0.1s" />
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-100 dark:bg-purple-600 transition-all duration-300 group-hover:bg-pink-300 dark:group-hover:bg-purple-500" style="transition-delay: 0.2s" />
         </div>
       </div>
     </div>

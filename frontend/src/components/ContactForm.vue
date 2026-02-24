@@ -33,7 +33,7 @@ const socials = [
 
 <template>
   <section>
-    <h2 class="text-center text-2xl font-extrabold text-pink-500 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+    <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
       ✿ Contact Me ✿
     </h2>
 
@@ -45,14 +45,14 @@ const socials = [
         :href="social.url"
         target="_blank"
         :class="social.hoverBorder"
-        class="group flex flex-col items-center gap-2 rounded-3xl border-2 border-pink-200 bg-white/80 px-6 py-5 shadow-lg shadow-pink-100/50 transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-300/50 cursor-pointer"
+        class="group flex flex-col items-center gap-2 rounded-3xl border-2 border-pink-200 dark:border-purple-500/30 bg-white/80 dark:bg-gray-900/80 px-6 py-5 shadow-lg shadow-pink-100/50 dark:shadow-purple-900/30 transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-300/50 dark:hover:shadow-purple-500/30 cursor-pointer"
       >
         <div
           :class="'bg-gradient-to-br ' + social.color"
           class="flex h-14 w-14 items-center justify-center rounded-2xl text-white shadow-md transition-all duration-300 group-hover:rotate-6 group-hover:scale-110"
           v-html="social.icon"
         />
-        <span class="text-xs font-bold text-pink-500 group-hover:text-pink-600 transition-colors">{{ social.name }}</span>
+        <span class="text-xs font-bold text-pink-500 dark:text-purple-300 group-hover:text-pink-600 dark:group-hover:text-purple-200 transition-colors">{{ social.name }}</span>
       </a>
     </div>
   </section>

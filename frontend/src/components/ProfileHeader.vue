@@ -3,15 +3,15 @@
 
 <template>
   <!-- Hero / Profile Header -->
-  <section class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-300 via-fuchsia-200 to-purple-200 p-8 md:p-14 shadow-2xl shadow-pink-300/50 border-2 border-pink-300">
+  <section class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-pink-300 via-fuchsia-200 to-purple-200 dark:from-gray-800 dark:via-purple-900/40 dark:to-gray-900 p-8 md:p-14 shadow-2xl shadow-pink-300/50 dark:shadow-purple-900/40 border-2 border-pink-300 dark:border-purple-500/30 transition-colors duration-500">
     <!-- Animated gradient background overlay -->
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-pink-400/20 via-transparent to-fuchsia-400/20 animate-pulse" style="animation-duration: 4s" />
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-pink-400/20 via-transparent to-fuchsia-400/20 dark:from-purple-500/10 dark:to-fuchsia-500/10 animate-pulse" style="animation-duration: 4s" />
 
     <!-- Decorative blobs with more color -->
-    <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-fuchsia-400/30 blur-3xl animate-float" />
-    <div class="pointer-events-none absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-pink-400/25 blur-2xl animate-float" style="animation-delay: 1.5s" />
-    <div class="pointer-events-none absolute top-1/2 left-1/4 h-32 w-32 rounded-full bg-purple-300/20 blur-2xl animate-float" style="animation-delay: 0.8s" />
-    <div class="pointer-events-none absolute -top-8 left-1/2 h-36 w-36 rounded-full bg-rose-300/20 blur-3xl animate-float" style="animation-delay: 2s" />
+    <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-fuchsia-400/30 dark:bg-purple-500/20 blur-3xl animate-float" />
+    <div class="pointer-events-none absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-pink-400/25 dark:bg-fuchsia-500/15 blur-2xl animate-float" style="animation-delay: 1.5s" />
+    <div class="pointer-events-none absolute top-1/2 left-1/4 h-32 w-32 rounded-full bg-purple-300/20 dark:bg-purple-600/15 blur-2xl animate-float" style="animation-delay: 0.8s" />
+    <div class="pointer-events-none absolute -top-8 left-1/2 h-36 w-36 rounded-full bg-rose-300/20 dark:bg-violet-500/15 blur-3xl animate-float" style="animation-delay: 2s" />
 
     <!-- Floating decorative elements -->
     <div class="pointer-events-none absolute top-4 right-8 text-3xl animate-float text-pink-400/60">♡</div>
@@ -37,21 +37,21 @@
 
       <!-- Text with gradient -->
       <div class="animate-fade-in-up">
-        <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl bg-gradient-to-r from-pink-600 via-fuchsia-500 to-purple-500 bg-clip-text text-transparent drop-shadow-sm" style="font-family: 'Pacifico', cursive;">
+        <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl bg-gradient-to-r from-pink-600 via-fuchsia-500 to-purple-500 dark:from-purple-300 dark:via-fuchsia-300 dark:to-pink-300 bg-clip-text text-transparent drop-shadow-sm" style="font-family: 'Pacifico', cursive;">
           Eunice B. Nipas
         </h1>
-        <p class="mt-3 text-lg font-bold text-pink-500 animate-fade-in-up" style="animation-delay: 0.2s">
+        <p class="mt-3 text-lg font-bold text-pink-500 dark:text-purple-300 animate-fade-in-up" style="animation-delay: 0.2s">
           <span class="animate-wiggle inline-block">✿</span>
           Welcome to my final project in webprog
           <span class="animate-wiggle inline-block" style="animation-delay: 0.5s">✿</span>
         </p>
         <!-- Decorative dots -->
         <div class="mt-4 flex justify-center gap-2">
-          <div class="h-2 w-2 rounded-full bg-pink-400 animate-sparkle" />
-          <div class="h-2 w-2 rounded-full bg-fuchsia-400 animate-sparkle" style="animation-delay: 0.3s" />
-          <div class="h-2 w-2 rounded-full bg-purple-400 animate-sparkle" style="animation-delay: 0.6s" />
-          <div class="h-2 w-2 rounded-full bg-rose-400 animate-sparkle" style="animation-delay: 0.9s" />
-          <div class="h-2 w-2 rounded-full bg-pink-400 animate-sparkle" style="animation-delay: 1.2s" />
+          <div class="h-2 w-2 rounded-full bg-pink-400 dark:bg-purple-400 animate-sparkle" />
+          <div class="h-2 w-2 rounded-full bg-fuchsia-400 dark:bg-fuchsia-400 animate-sparkle" style="animation-delay: 0.3s" />
+          <div class="h-2 w-2 rounded-full bg-purple-400 dark:bg-violet-400 animate-sparkle" style="animation-delay: 0.6s" />
+          <div class="h-2 w-2 rounded-full bg-rose-400 dark:bg-pink-400 animate-sparkle" style="animation-delay: 0.9s" />
+          <div class="h-2 w-2 rounded-full bg-pink-400 dark:bg-purple-400 animate-sparkle" style="animation-delay: 1.2s" />
         </div>
       </div>
     </div>

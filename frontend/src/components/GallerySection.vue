@@ -26,7 +26,7 @@ function closeLightbox() {
 
 <template>
   <section>
-    <h2 class="text-center text-2xl font-extrabold text-pink-500 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+    <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
       ✿ Gallery ✿
     </h2>
 
@@ -36,7 +36,7 @@ function closeLightbox() {
           v-for="image in images"
           :key="image"
           @click="openLightbox(image)"
-          class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-pink-200 bg-pink-50 shadow-md shadow-pink-100/50 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-pink-300/50 hover:border-pink-400"
+          class="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-pink-200 dark:border-purple-500/30 bg-pink-50 dark:bg-gray-800/60 shadow-md shadow-pink-100/50 dark:shadow-purple-900/30 transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-pink-300/50 dark:hover:shadow-purple-500/30 hover:border-pink-400 dark:hover:border-purple-400"
         >
           <img
             :src="basePath + image"
@@ -45,7 +45,7 @@ function closeLightbox() {
             loading="lazy"
           />
           <!-- Hover overlay -->
-          <div class="absolute inset-0 flex items-center justify-center bg-pink-400/0 transition-all duration-300 group-hover:bg-pink-400/30">
+          <div class="absolute inset-0 flex items-center justify-center bg-pink-400/0 transition-all duration-300 group-hover:bg-pink-400/30 dark:group-hover:bg-purple-500/30">
             <span class="text-2xl opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-50">🔍</span>
           </div>
         </article>
@@ -63,14 +63,14 @@ function closeLightbox() {
           <!-- Close button -->
           <button
             @click="closeLightbox"
-            class="absolute -top-4 -right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-pink-400 text-white shadow-lg transition-all hover:bg-pink-500 hover:scale-110"
+            class="absolute -top-4 -right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-pink-400 dark:bg-purple-500 text-white shadow-lg transition-all hover:bg-pink-500 dark:hover:bg-purple-400 hover:scale-110"
           >
             ✕
           </button>
           <img
             :src="basePath + lightboxImage"
             :alt="lightboxImage"
-            class="max-h-[80vh] w-auto rounded-3xl border-4 border-white shadow-2xl shadow-pink-300/30 object-contain"
+            class="max-h-[80vh] w-auto rounded-3xl border-4 border-white dark:border-gray-700 shadow-2xl shadow-pink-300/30 dark:shadow-purple-500/20 object-contain"
           />
         </div>
       </div>
