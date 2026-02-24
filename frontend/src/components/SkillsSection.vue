@@ -1,57 +1,44 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '../api'
-
-const skills = ref([])
-const loading = ref(true)
-
-onMounted(async () => {
-  try {
-    const { data } = await api.get('/skills')
-    skills.value = data
-  } catch (e) {
-    console.error('Failed to load skills', e)
-  } finally {
-    loading.value = false
-  }
-})
-
-const categoryColors = {
-  frontend: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
-  backend: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-  database: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-  devops: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-  other: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-}
-
-function colorFor(category) {
-  return categoryColors[category?.toLowerCase()] || categoryColors.other
-}
+const skills = [
+  { name: 'HTML', icon: '🌸', color: 'from-pink-200 to-rose-300', border: 'border-rose-300' },
+  { name: 'JavaScript', icon: '✨', color: 'from-yellow-200 to-pink-200', border: 'border-pink-300' },
+  { name: 'Python', icon: '🐍', color: 'from-fuchsia-200 to-pink-200', border: 'border-fuchsia-300' },
+]
 </script>
 
 <template>
   <section>
-    <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Skills</h2>
+    <h2 class="text-center text-2xl font-extrabold text-pink-500 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+      ✿ Skills ✿
+    </h2>
 
-    <!-- Loading skeleton -->
-    <div v-if="loading" class="mt-6 flex flex-wrap gap-3">
+    <div class="mt-8 flex flex-wrap justify-center gap-6">
       <div
-        v-for="i in 8"
-        :key="i"
-        class="h-9 w-24 animate-pulse rounded-full bg-gray-700/40"
-      />
-    </div>
-
-    <!-- Pills -->
-    <div v-else class="mt-6 flex flex-wrap gap-3">
-      <span
         v-for="skill in skills"
-        :key="skill.id"
-        :class="colorFor(skill.category)"
-        class="rounded-full border px-4 py-1.5 text-sm font-medium transition hover:scale-105"
+        :key="skill.name"
+        :class="skill.border"
+        class="group flex flex-col items-center gap-3 rounded-3xl border-2 bg-white/80 p-6 shadow-lg shadow-pink-100/50 transition-all duration-500 hover:scale-110 hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-300/50 cursor-pointer min-w-[140px]"
       >
-        {{ skill.name }}
-      </span>
+        <!-- Icon badge -->
+        <div
+          :class="'bg-gradient-to-br ' + skill.color"
+          class="flex h-16 w-16 items-center justify-center rounded-2xl text-3xl shadow-md transition-all duration-300 group-hover:rotate-12 group-hover:scale-110"
+        >
+          {{ skill.icon }}
+        </div>
+
+        <!-- Name -->
+        <span class="text-sm font-extrabold text-pink-600 group-hover:text-pink-700 transition-colors">
+          {{ skill.name }}
+        </span>
+
+        <!-- Decorative dots -->
+        <div class="flex gap-1">
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-300 transition-all duration-300 group-hover:bg-pink-500" />
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-200 transition-all duration-300 group-hover:bg-pink-400" style="transition-delay: 0.1s" />
+          <div class="h-1.5 w-1.5 rounded-full bg-pink-100 transition-all duration-300 group-hover:bg-pink-300" style="transition-delay: 0.2s" />
+        </div>
+      </div>
     </div>
   </section>
 </template>

@@ -2,19 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Custom scrollbar ─────────────────────────────────────────── */
+/* ── Custom scrollbar (pink theme) ────────────────────────────── */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #fff0f5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 4px;
+  background: #f9a8d4;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f472b6;
 }
 
 /* ── Smooth scroll ────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
+
+/* ── Kawaii animations ────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* ── Bubble button style ─────────────────────────────────────── */
+.btn-bubble {
+  @apply rounded-full bg-pink-400 px-6 py-2.5 text-sm font-bold text-white shadow-md transition-all duration-300;
+}
+.btn-bubble:hover {
+  @apply bg-pink-500 shadow-lg shadow-pink-300/40 -translate-y-0.5;
+}
+
+/* ── Kawaii card ──────────────────────────────────────────────── */
+.kawaii-card {
+  @apply rounded-3xl border-2 border-pink-200 bg-white/80 backdrop-blur-sm shadow-lg shadow-pink-100/50 transition-all duration-300;
+}
+.kawaii-card:hover {
+  @apply shadow-xl shadow-pink-200/60 -translate-y-1 border-pink-300;
+}
+
