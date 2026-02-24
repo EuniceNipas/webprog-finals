@@ -4,16 +4,12 @@ import { ref } from 'vue'
 const images = [
   'Badminton.jpg',
   'cat.jpg',
-  'Draw.jpg',
   'drinks.jpg',
   'eunice.jpg',
   'family.jpg',
   'firstrun.jpg',
   'g4.jpg',
-  'Gaming.jpg',
   'loml.jpg',
-  'Music.jpg',
-  'Run.jpg',
 ]
 
 const basePath = '/gallery/assets/'
