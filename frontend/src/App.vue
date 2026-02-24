@@ -7,6 +7,7 @@ import GallerySection from './components/GallerySection.vue'
 import SkillsSection from './components/SkillsSection.vue'
 import ContactForm from './components/ContactForm.vue'
 import GuestbookSection from './components/GuestbookSection.vue'
+import MusicSection from './components/MusicSection.vue'
 
 import { ref, onMounted } from 'vue'
 
@@ -118,6 +119,10 @@ const navLinks = [
 
       <div id="interest">
         <InterestSection />
+      </div>
+
+      <div id="music">
+        <MusicSection />
       </div>
 
       <div id="education">

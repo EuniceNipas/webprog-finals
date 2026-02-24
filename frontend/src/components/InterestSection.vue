@@ -2,9 +2,15 @@
 const interests = [
   { label: 'Fun Runs', image: '/gallery/assets/Run.jpg', emoji: '🏃‍♀️' },
   { label: 'Drawing', image: '/gallery/assets/Draw.jpg', emoji: '🎨' },
-  { label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵' },
+  { label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵', link: '#music' },
   { label: 'Gaming', image: '/gallery/assets/Gaming.jpg', emoji: '🎮' },
 ]
+
+function handleClick(item) {
+  if (item.link) {
+    document.querySelector(item.link)?.scrollIntoView({ behavior: 'smooth' })
+  }
+}
 </script>
 
 <template>
@@ -17,6 +23,7 @@ const interests = [
       <div
         v-for="(item, i) in interests"
         :key="item.label"
+        @click="handleClick(item)"
         class="group relative overflow-hidden rounded-3xl border-2 border-pink-200 dark:border-purple-500/30 shadow-lg shadow-pink-100/50 dark:shadow-purple-900/30 cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-xl hover:shadow-pink-300/40 dark:hover:shadow-purple-500/30 hover:border-pink-400 dark:hover:border-purple-400"
         :style="{ animationDelay: i * 0.1 + 's' }"
       >
