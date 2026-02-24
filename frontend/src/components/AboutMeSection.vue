@@ -5,13 +5,6 @@
     </h2>
 
     <div class="mt-8 kawaii-card p-8 text-center">
-      <!-- Profile icon -->
-      <div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-pink-300 to-fuchsia-300 shadow-lg shadow-pink-200/50">
-        <svg class="h-12 w-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-        </svg>
-      </div>
-
       <!-- Info cards -->
       <div class="grid gap-4 sm:grid-cols-2 mb-6">
         <div class="rounded-2xl border-2 border-pink-200 bg-pink-50/80 p-4 transition-all duration-300 hover:scale-105 hover:shadow-md hover:shadow-pink-200/50">
