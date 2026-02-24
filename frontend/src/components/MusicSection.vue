@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
 
+const props = defineProps({ show: Boolean })
 const emit = defineEmits(['close'])
 
 const tracks = [
@@ -24,7 +25,7 @@ const tracks = [
   },
 ]
 
-const currentIndex = ref(null)
+const currentIndex = ref(0)
 const isPlaying = ref(false)
 const progress = ref(0)
 const currentTime = ref(0)
@@ -51,26 +52,42 @@ function updateProgress() {
   }
 }
 
-function playTrack(index) {
-  if (currentIndex.value === index && isPlaying.value) {
+function togglePlay() {
+  if (isPlaying.value) {
     audio.pause()
     isPlaying.value = false
     cancelAnimationFrame(rafId)
-    return
+  } else {
+    if (!audio.src || audio.src !== location.origin + tracks[currentIndex.value].src) {
+      audio.src = tracks[currentIndex.value].src
+      audio.load()
+    }
+    audio.play()
+    isPlaying.value = true
+    rafId = requestAnimationFrame(updateProgress)
   }
+}
 
-  if (currentIndex.value !== index) {
-    audio.src = tracks[index].src
-    audio.load()
-    currentIndex.value = index
-    progress.value = 0
-    currentTime.value = 0
-    duration.value = 0
-  }
-
+function loadAndPlay(index) {
+  currentIndex.value = index
+  progress.value = 0
+  currentTime.value = 0
+  duration.value = 0
+  audio.src = tracks[index].src
+  audio.load()
   audio.play()
   isPlaying.value = true
   rafId = requestAnimationFrame(updateProgress)
+}
+
+function prevTrack() {
+  const prev = currentIndex.value > 0 ? currentIndex.value - 1 : tracks.length - 1
+  loadAndPlay(prev)
+}
+
+function nextTrack() {
+  const next = currentIndex.value < tracks.length - 1 ? currentIndex.value + 1 : 0
+  loadAndPlay(next)
 }
 
 function seek(e) {
@@ -81,24 +98,18 @@ function seek(e) {
   progress.value = pct * 100
 }
 
-function prevTrack() {
-  if (currentIndex.value === null) return
-  const prev = currentIndex.value > 0 ? currentIndex.value - 1 : tracks.length - 1
-  playTrack(prev)
-}
-
-function nextTrack() {
-  if (currentIndex.value === null) return
-  const next = currentIndex.value < tracks.length - 1 ? currentIndex.value + 1 : 0
-  playTrack(next)
+function closePlayer() {
+  audio.pause()
+  isPlaying.value = false
+  cancelAnimationFrame(rafId)
+  emit('close')
 }
 
 audio.addEventListener('ended', () => {
   isPlaying.value = false
   cancelAnimationFrame(rafId)
-  // Auto-play next track
   if (currentIndex.value < tracks.length - 1) {
-    playTrack(currentIndex.value + 1)
+    nextTrack()
   } else {
     progress.value = 0
     currentTime.value = 0
@@ -117,160 +128,146 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section id="music">
-    <div class="flex items-center justify-center gap-3">
-      <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
-        ✿ My Vibes ✿
-      </h2>
-      <button
-        @click="emit('close')"
-        class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 text-pink-400 transition-all duration-300 hover:scale-110 hover:bg-pink-100 hover:text-pink-600 dark:border-purple-500/30 dark:bg-gray-800/80 dark:text-purple-400 dark:hover:bg-purple-500/20 dark:hover:text-purple-300"
-        title="Close music section"
-      >
-        ✕
-      </button>
-    </div>
-
-    <p class="mt-3 text-center text-sm font-medium text-pink-400 dark:text-purple-400">
-      🎵 Here are some songs I vibe to~ Click to play! 🎵
-    </p>
-
-    <div class="mt-8 grid gap-5 sm:grid-cols-3">
+  <Teleport to="body">
+    <transition
+      enter-active-class="transition-all duration-400 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-all duration-300 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
       <div
-        v-for="(track, i) in tracks"
-        :key="track.title"
-        @click="playTrack(i)"
-        class="group relative cursor-pointer overflow-hidden rounded-3xl border-2 transition-all duration-500 hover:scale-105 hover:-translate-y-2"
-        :class="[
-          currentIndex === i
-            ? 'border-pink-400 dark:border-purple-400 shadow-xl shadow-pink-300/40 dark:shadow-purple-500/30'
-            : 'border-pink-200 dark:border-purple-500/30 shadow-lg shadow-pink-100/50 dark:shadow-purple-900/30 hover:border-pink-400 dark:hover:border-purple-400 hover:shadow-xl'
-        ]"
+        v-if="show"
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-xl p-4 sm:p-6"
+        @click="closePlayer"
       >
-        <!-- Album cover -->
-        <div class="relative">
-          <img
-            :src="track.cover"
-            :alt="track.title"
-            class="h-48 w-full object-cover transition-all duration-500"
-            :class="currentIndex === i && isPlaying ? 'brightness-75' : 'group-hover:brightness-90'"
-          />
+        <!-- Player card -->
+        <div
+          class="relative w-full max-w-md rounded-[2rem] border-2 border-pink-200 bg-gradient-to-b from-white via-pink-50 to-fuchsia-50 dark:border-purple-500/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-950 shadow-2xl shadow-pink-300/30 dark:shadow-purple-900/40 animate-fade-in-up overflow-hidden"
+          @click.stop
+        >
+          <!-- Close button -->
+          <button
+            @click="closePlayer"
+            class="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-pink-100/80 dark:bg-gray-800/80 text-pink-400 dark:text-purple-400 transition-all duration-300 hover:scale-110 hover:bg-pink-200 dark:hover:bg-purple-500/30"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
 
-          <!-- Play/Pause overlay -->
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div
-              class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 dark:bg-gray-900/90 shadow-lg transition-all duration-300"
-              :class="currentIndex === i && isPlaying
-                ? 'scale-100 opacity-100'
-                : 'scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100'"
-            >
-              <!-- Pause icon -->
-              <svg v-if="currentIndex === i && isPlaying" class="h-6 w-6 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-              </svg>
-              <!-- Play icon -->
-              <svg v-else class="h-6 w-6 ml-1 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
+          <!-- Header -->
+          <div class="pt-6 pb-2 text-center">
+            <p class="text-xs font-bold uppercase tracking-widest text-pink-400 dark:text-purple-500">Now Playing</p>
+            <p class="mt-1 text-[10px] font-semibold text-pink-300 dark:text-purple-600">{{ currentIndex + 1 }} / {{ tracks.length }}</p>
+          </div>
+
+          <!-- Album art -->
+          <div class="flex justify-center px-8 py-4">
+            <div class="relative">
+              <!-- Glow ring -->
+              <div
+                class="absolute -inset-3 rounded-3xl blur-xl transition-opacity duration-700"
+                :class="isPlaying ? 'bg-pink-400/30 dark:bg-purple-500/25 opacity-100' : 'opacity-0'"
+              />
+              <img
+                :src="tracks[currentIndex].cover"
+                :alt="tracks[currentIndex].title"
+                class="relative h-64 w-64 sm:h-72 sm:w-72 rounded-3xl object-cover border-2 border-pink-200 dark:border-purple-500/30 shadow-xl transition-all duration-700"
+                :class="isPlaying ? 'scale-100 shadow-pink-300/50 dark:shadow-purple-500/30' : 'scale-95 shadow-pink-200/30'"
+              />
+              <!-- Equalizer bars -->
+              <div v-if="isPlaying" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-end gap-[3px]">
+                <span class="inline-block w-1.5 rounded-full bg-white/90 animate-bounce" style="height: 14px; animation-delay: 0s; animation-duration: 0.5s" />
+                <span class="inline-block w-1.5 rounded-full bg-white/90 animate-bounce" style="height: 22px; animation-delay: 0.12s; animation-duration: 0.5s" />
+                <span class="inline-block w-1.5 rounded-full bg-white/90 animate-bounce" style="height: 12px; animation-delay: 0.24s; animation-duration: 0.5s" />
+                <span class="inline-block w-1.5 rounded-full bg-white/90 animate-bounce" style="height: 18px; animation-delay: 0.08s; animation-duration: 0.5s" />
+                <span class="inline-block w-1.5 rounded-full bg-white/90 animate-bounce" style="height: 10px; animation-delay: 0.2s; animation-duration: 0.5s" />
+              </div>
             </div>
           </div>
 
-          <!-- Now-playing indicator -->
-          <div v-if="currentIndex === i && isPlaying" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-end gap-[3px]">
-            <span class="inline-block w-1 rounded-full bg-white animate-bounce" style="height: 12px; animation-delay: 0s; animation-duration: 0.6s" />
-            <span class="inline-block w-1 rounded-full bg-white animate-bounce" style="height: 18px; animation-delay: 0.15s; animation-duration: 0.6s" />
-            <span class="inline-block w-1 rounded-full bg-white animate-bounce" style="height: 10px; animation-delay: 0.3s; animation-duration: 0.6s" />
-            <span class="inline-block w-1 rounded-full bg-white animate-bounce" style="height: 16px; animation-delay: 0.1s; animation-duration: 0.6s" />
-          </div>
-        </div>
-
-        <!-- Track info -->
-        <div class="bg-white/80 dark:bg-gray-900/80 p-4 text-center transition-colors duration-500">
-          <p class="text-sm font-extrabold text-pink-600 dark:text-purple-300">{{ track.title }}</p>
-          <p class="mt-0.5 text-xs font-medium text-pink-400 dark:text-purple-500">{{ track.artist }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Now-playing bar -->
-    <div
-      v-if="currentIndex !== null"
-      class="mt-6 kawaii-card p-4 sm:p-5 animate-fade-in-up"
-    >
-      <div class="flex items-center gap-4">
-        <!-- Mini cover -->
-        <img
-          :src="tracks[currentIndex].cover"
-          :alt="tracks[currentIndex].title"
-          class="h-12 w-12 rounded-xl object-cover border-2 border-pink-200 dark:border-purple-500/30 shadow-md"
-          :class="isPlaying ? 'animate-spin' : ''"
-          :style="isPlaying ? 'animation-duration: 4s' : ''"
-        />
-
-        <div class="flex-1 min-w-0">
-          <!-- Title + artist -->
-          <div class="flex items-baseline gap-2">
-            <p class="truncate text-sm font-bold text-pink-600 dark:text-purple-300">
+          <!-- Track info -->
+          <div class="text-center px-8">
+            <h3 class="text-xl font-extrabold text-pink-600 dark:text-purple-300" style="font-family: 'Pacifico', cursive;">
               {{ tracks[currentIndex].title }}
+            </h3>
+            <p class="mt-1 text-sm font-semibold text-pink-400 dark:text-purple-500">
+              {{ tracks[currentIndex].artist }}
             </p>
-            <span class="text-xs font-medium text-pink-400 dark:text-purple-500 whitespace-nowrap">
-              — {{ tracks[currentIndex].artist }}
-            </span>
           </div>
 
           <!-- Progress bar -->
-          <div
-            @click.stop="seek"
-            class="mt-2 h-2 w-full cursor-pointer rounded-full bg-pink-100 dark:bg-gray-700 overflow-hidden group/bar"
-          >
+          <div class="px-8 mt-5">
             <div
-              class="h-full rounded-full bg-gradient-to-r from-pink-400 to-fuchsia-400 dark:from-purple-500 dark:to-fuchsia-500 transition-[width] duration-100"
-              :style="{ width: progress + '%' }"
+              @click="seek"
+              class="h-2 w-full cursor-pointer rounded-full bg-pink-100 dark:bg-gray-700 overflow-hidden"
+            >
+              <div
+                class="h-full rounded-full bg-gradient-to-r from-pink-400 to-fuchsia-400 dark:from-purple-500 dark:to-fuchsia-500 transition-[width] duration-100"
+                :style="{ width: progress + '%' }"
+              />
+            </div>
+            <div class="mt-1 flex justify-between text-[10px] font-bold text-pink-300 dark:text-purple-600">
+              <span>{{ formatTime(currentTime) }}</span>
+              <span>{{ formatTime(duration) }}</span>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="flex items-center justify-center gap-5 px-8 pb-8 pt-4">
+            <!-- Prev -->
+            <button
+              @click="prevTrack"
+              class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-pink-200/50 dark:hover:shadow-purple-500/20"
+              title="Previous"
+            >
+              <svg class="h-5 w-5 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+              </svg>
+            </button>
+
+            <!-- Play / Pause -->
+            <button
+              @click="togglePlay"
+              class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-fuchsia-500 dark:from-purple-500 dark:to-fuchsia-600 text-white shadow-lg shadow-pink-400/40 dark:shadow-purple-500/40 transition-all duration-300 hover:scale-110 hover:shadow-xl"
+            >
+              <svg v-if="isPlaying" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+              </svg>
+              <svg v-else class="h-7 w-7 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+
+            <!-- Next -->
+            <button
+              @click="nextTrack"
+              class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-pink-200/50 dark:hover:shadow-purple-500/20"
+              title="Next"
+            >
+              <svg class="h-5 w-5 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Track list dots -->
+          <div class="flex justify-center gap-2 pb-6">
+            <button
+              v-for="(track, i) in tracks"
+              :key="i"
+              @click="loadAndPlay(i)"
+              class="h-2.5 rounded-full transition-all duration-300"
+              :class="currentIndex === i
+                ? 'w-8 bg-pink-400 dark:bg-purple-400'
+                : 'w-2.5 bg-pink-200 dark:bg-purple-700 hover:bg-pink-300 dark:hover:bg-purple-500'"
+              :title="track.title"
             />
           </div>
-
-          <!-- Time -->
-          <div class="mt-1 flex justify-between text-[10px] font-bold text-pink-300 dark:text-purple-500">
-            <span>{{ formatTime(currentTime) }}</span>
-            <span>{{ formatTime(duration) }}</span>
-          </div>
         </div>
-
-        <!-- Prev button -->
-        <button
-          @click.stop="prevTrack"
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-md"
-          title="Previous track"
-        >
-          <svg class="h-4 w-4 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-          </svg>
-        </button>
-
-        <!-- Play/Pause button -->
-        <button
-          @click.stop="playTrack(currentIndex)"
-          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-md"
-        >
-          <svg v-if="isPlaying" class="h-5 w-5 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-          </svg>
-          <svg v-else class="h-5 w-5 ml-0.5 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"/>
-          </svg>
-        </button>
-
-        <!-- Next button -->
-        <button
-          @click.stop="nextTrack"
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-md"
-          title="Next track"
-        >
-          <svg class="h-4 w-4 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-          </svg>
-        </button>
       </div>
-    </div>
-  </section>
+    </transition>
+  </Teleport>
 </template>

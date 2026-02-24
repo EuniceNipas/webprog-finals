@@ -17,11 +17,6 @@ const showMusic = ref(false)
 
 function toggleMusic() {
   showMusic.value = !showMusic.value
-  if (showMusic.value) {
-    nextTick(() => {
-      document.getElementById('music')?.scrollIntoView({ behavior: 'smooth' })
-    })
-  }
 }
 
 onMounted(() => {
@@ -131,10 +126,6 @@ const navLinks = [
         <InterestSection @open-music="toggleMusic" />
       </div>
 
-      <div v-if="showMusic" id="music" class="animate-fade-in-up">
-        <MusicSection @close="showMusic = false" />
-      </div>
-
       <div id="education">
         <EducationSection />
       </div>
@@ -155,6 +146,9 @@ const navLinks = [
         <ContactForm />
       </div>
     </main>
+
+    <!-- Music Player Modal -->
+    <MusicSection :show="showMusic" @close="showMusic = false" />
 
     <!-- Footer -->
     <footer class="relative z-10 border-t-2 border-pink-200 bg-white/60 py-8 text-center dark:border-purple-500/30 dark:bg-gray-900/60 transition-colors duration-500">
