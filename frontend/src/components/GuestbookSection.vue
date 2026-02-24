@@ -18,6 +18,7 @@ async function fetchEntries() {
       .from('guestbook')
       .select('*')
       .order('created_at', { ascending: false })
+
     if (error) throw error
     entries.value = data
   } catch (e) {
@@ -36,6 +37,7 @@ async function submit() {
       .insert([{ name: form.value.name, message: form.value.message }])
       .select()
       .single()
+
     if (error) throw error
     entries.value.unshift(data)
     form.value = { name: '', message: '' }
@@ -65,24 +67,46 @@ function timeAgo(dateStr) {
 
 <template>
   <section>
-    <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Guestbook</h2>
-    <form @submit.prevent="submit" class="mt-6 flex flex-col gap-3 rounded-2xl border border-gray-800 bg-gray-900/60 p-6 sm:flex-row sm:items-end">
-      <input v-model="form.name" required type="text" placeholder="Your name" class="flex-1 rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-100 placeholder-gray-500 outline-none transition focus:border-indigo-500" />
-      <input v-model="form.message" required type="text" placeholder="Leave a message..." class="flex-[2] rounded-lg border border-gray-700 bg-gray-800/80 px-4 py-2 text-sm text-gray-100 placeholder-gray-500 outline-none transition focus:border-indigo-500" />
-      <button type="submit" :disabled="sending" class="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-50">{{ sending ? 'Posting...' : 'Sign' }}</button>
-    </form>
-    <div class="mt-6 space-y-4">
-      <div v-if="loading" class="space-y-3">
-        <div v-for="i in 3" :key="i" class="h-14 animate-pulse rounded-xl bg-gray-800/40" />
-      </div>
-      <div v-for="entry in entries" :key="entry.id" class="rounded-xl border border-gray-800 bg-gray-900/40 px-5 py-3">
-        <div class="flex items-baseline justify-between gap-2">
-          <span class="font-medium text-indigo-400">{{ entry.name }}</span>
-          <span class="whitespace-nowrap text-xs text-gray-500">{{ timeAgo(entry.created_at) }}</span>
+    <h2 class="text-center text-2xl font-extrabold text-pink-500 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+      Guestbook
+    </h2>
+
+    <p class="mt-4 text-center text-sm font-medium text-pink-400">
+      Hello there! Thanks for visiting my website. Feel free to leave a message here~
+    </p>
+
+    <div class="mt-6 kawaii-card p-6 sm:p-8">
+      <form @submit.prevent="submit" class="space-y-4">
+        <div class="flex flex-col gap-4 sm:flex-row">
+          <input v-model="form.name" required type="text" placeholder="Your name" class="flex-1 rounded-2xl border-2 border-pink-200 bg-pink-50/50 px-5 py-3 text-sm font-medium text-gray-700 placeholder-pink-300 outline-none transition-all duration-300 focus:border-pink-400 focus:bg-white focus:shadow-md focus:shadow-pink-200/50" />
+          <input v-model="form.message" required type="text" placeholder="Leave a cute message~" class="flex-[2] rounded-2xl border-2 border-pink-200 bg-pink-50/50 px-5 py-3 text-sm font-medium text-gray-700 placeholder-pink-300 outline-none transition-all duration-300 focus:border-pink-400 focus:bg-white focus:shadow-md focus:shadow-pink-200/50" />
         </div>
-        <p class="mt-1 text-sm text-gray-300">{{ entry.message }}</p>
+        <div class="text-center sm:text-right">
+          <button type="submit" :disabled="sending" class="btn-bubble inline-flex items-center gap-2">
+            <span>{{ sending ? 'Posting~' : 'Sign Guestbook' }}</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="my-5 border-t-2 border-pink-100"></div>
+
+      <div class="max-h-72 overflow-y-auto space-y-3 pr-2" style="scrollbar-width: thin; scrollbar-color: #f9a8d4 #fff0f5;">
+        <div v-if="loading" class="space-y-3">
+          <div v-for="i in 3" :key="i" class="h-16 animate-pulse rounded-2xl bg-pink-100/60"></div>
+        </div>
+
+        <div v-for="entry in entries" :key="entry.id" class="rounded-2xl border-2 border-pink-200 bg-pink-50/60 px-5 py-4 transition-all duration-300 hover:border-pink-300 hover:shadow-md hover:shadow-pink-100/50 hover:bg-pink-50">
+          <div class="flex items-baseline justify-between gap-2">
+            <span class="font-bold text-pink-500">{{ entry.name }}</span>
+            <span class="whitespace-nowrap text-xs font-medium text-pink-300">{{ timeAgo(entry.created_at) }}</span>
+          </div>
+          <p class="mt-1 text-sm text-gray-600 font-medium">{{ entry.message }}</p>
+        </div>
+
+        <p v-if="!loading && entries.length === 0" class="text-center text-sm font-medium text-pink-400 py-6">
+          No entries yet, be the first to sign the guestbook!
+        </p>
       </div>
-      <p v-if="!loading && entries.length === 0" class="text-sm text-gray-500">No entries yet - be the first to sign the guestbook!</p>
     </div>
   </section>
 </template>
