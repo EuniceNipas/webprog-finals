@@ -1,14 +1,16 @@
 <script setup>
+const emit = defineEmits(['open-music'])
+
 const interests = [
   { label: 'Fun Runs', image: '/gallery/assets/Run.jpg', emoji: '🏃‍♀️' },
   { label: 'Drawing', image: '/gallery/assets/Draw.jpg', emoji: '🎨' },
-  { label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵', link: '#music' },
+  { label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵', action: 'music' },
   { label: 'Gaming', image: '/gallery/assets/Gaming.jpg', emoji: '🎮' },
 ]
 
 function handleClick(item) {
-  if (item.link) {
-    document.querySelector(item.link)?.scrollIntoView({ behavior: 'smooth' })
+  if (item.action === 'music') {
+    emit('open-music')
   }
 }
 </script>

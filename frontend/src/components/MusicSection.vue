@@ -1,6 +1,8 @@
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
 
+const emit = defineEmits(['close'])
+
 const tracks = [
   {
     title: '12 Fractures',
@@ -79,6 +81,18 @@ function seek(e) {
   progress.value = pct * 100
 }
 
+function prevTrack() {
+  if (currentIndex.value === null) return
+  const prev = currentIndex.value > 0 ? currentIndex.value - 1 : tracks.length - 1
+  playTrack(prev)
+}
+
+function nextTrack() {
+  if (currentIndex.value === null) return
+  const next = currentIndex.value < tracks.length - 1 ? currentIndex.value + 1 : 0
+  playTrack(next)
+}
+
 audio.addEventListener('ended', () => {
   isPlaying.value = false
   cancelAnimationFrame(rafId)
@@ -104,9 +118,18 @@ onUnmounted(() => {
 
 <template>
   <section id="music">
-    <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
-      ✿ My Vibes ✿
-    </h2>
+    <div class="flex items-center justify-center gap-3">
+      <h2 class="text-center text-2xl font-extrabold text-pink-500 dark:text-purple-400 sm:text-3xl" style="font-family: 'Pacifico', cursive;">
+        ✿ My Vibes ✿
+      </h2>
+      <button
+        @click="emit('close')"
+        class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 text-pink-400 transition-all duration-300 hover:scale-110 hover:bg-pink-100 hover:text-pink-600 dark:border-purple-500/30 dark:bg-gray-800/80 dark:text-purple-400 dark:hover:bg-purple-500/20 dark:hover:text-purple-300"
+        title="Close music section"
+      >
+        ✕
+      </button>
+    </div>
 
     <p class="mt-3 text-center text-sm font-medium text-pink-400 dark:text-purple-400">
       🎵 Here are some songs I vibe to~ Click to play! 🎵
@@ -213,6 +236,17 @@ onUnmounted(() => {
           </div>
         </div>
 
+        <!-- Prev button -->
+        <button
+          @click.stop="prevTrack"
+          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-md"
+          title="Previous track"
+        >
+          <svg class="h-4 w-4 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+          </svg>
+        </button>
+
         <!-- Play/Pause button -->
         <button
           @click.stop="playTrack(currentIndex)"
@@ -223,6 +257,17 @@ onUnmounted(() => {
           </svg>
           <svg v-else class="h-5 w-5 ml-0.5 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+
+        <!-- Next button -->
+        <button
+          @click.stop="nextTrack"
+          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 border-pink-200 bg-white/80 dark:border-purple-500/30 dark:bg-gray-800/80 transition-all duration-300 hover:scale-110 hover:shadow-md"
+          title="Next track"
+        >
+          <svg class="h-4 w-4 text-pink-500 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
           </svg>
         </button>
       </div>

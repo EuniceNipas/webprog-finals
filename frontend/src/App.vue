@@ -9,10 +9,20 @@ import ContactForm from './components/ContactForm.vue'
 import GuestbookSection from './components/GuestbookSection.vue'
 import MusicSection from './components/MusicSection.vue'
 
-import { ref, onMounted } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 
 const mobileOpen = ref(false)
 const isDark = ref(false)
+const showMusic = ref(false)
+
+function toggleMusic() {
+  showMusic.value = !showMusic.value
+  if (showMusic.value) {
+    nextTick(() => {
+      document.getElementById('music')?.scrollIntoView({ behavior: 'smooth' })
+    })
+  }
+}
 
 onMounted(() => {
   const saved = localStorage.getItem('theme')
@@ -118,11 +128,11 @@ const navLinks = [
       </div>
 
       <div id="interest">
-        <InterestSection />
+        <InterestSection @open-music="toggleMusic" />
       </div>
 
-      <div id="music">
-        <MusicSection />
+      <div v-if="showMusic" id="music" class="animate-fade-in-up">
+        <MusicSection @close="showMusic = false" />
       </div>
 
       <div id="education">
