@@ -8,15 +8,28 @@ import SkillsSection from './components/SkillsSection.vue'
 import ContactForm from './components/ContactForm.vue'
 import GuestbookSection from './components/GuestbookSection.vue'
 import MusicSection from './components/MusicSection.vue'
+import InterestModal from './components/InterestModal.vue'
 
 import { ref, nextTick, onMounted } from 'vue'
 
 const mobileOpen = ref(false)
 const isDark = ref(false)
 const showMusic = ref(false)
+const showInterest = ref(false)
+const activeInterest = ref(null)
 
 function toggleMusic() {
   showMusic.value = !showMusic.value
+}
+
+function openInterest(item) {
+  activeInterest.value = item
+  showInterest.value = true
+}
+
+function closeInterest() {
+  showInterest.value = false
+  activeInterest.value = null
 }
 
 onMounted(() => {
@@ -123,7 +136,7 @@ const navLinks = [
       </div>
 
       <div id="interest">
-        <InterestSection @open-music="toggleMusic" />
+        <InterestSection @open-music="toggleMusic" @open-interest="openInterest" />
       </div>
 
       <div id="education">
@@ -149,6 +162,9 @@ const navLinks = [
 
     <!-- Music Player Modal -->
     <MusicSection :show="showMusic" @close="showMusic = false" />
+
+    <!-- Interest Modal (Fun Runs / Drawing / Gaming) -->
+    <InterestModal :show="showInterest" :interest="activeInterest" @close="closeInterest" />
 
     <!-- Footer -->
     <footer class="relative z-10 border-t-2 border-pink-200 bg-white/60 py-8 text-center dark:border-purple-500/30 dark:bg-gray-900/60 transition-colors duration-500">

@@ -1,16 +1,40 @@
 <script setup>
-const emit = defineEmits(['open-music'])
+const emit = defineEmits(['open-music', 'open-interest'])
 
 const interests = [
-  { label: 'Fun Runs', image: '/gallery/assets/Run.jpg', emoji: '🏃‍♀️' },
-  { label: 'Drawing', image: '/gallery/assets/Draw.jpg', emoji: '🎨' },
-  { label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵', action: 'music' },
-  { label: 'Gaming', image: '/gallery/assets/Gaming.jpg', emoji: '🎮' },
+  {
+    label: 'Fun Runs', image: '/gallery/assets/Run.jpg', emoji: '🏃‍♀️', action: 'interest',
+    media: [
+      { type: 'video', src: '/interests/funrun/funrun.mp4', caption: 'My Fun Run highlights! 🏃‍♀️' },
+    ],
+  },
+  {
+    label: 'Drawing', image: '/gallery/assets/Draw.jpg', emoji: '🎨', action: 'interest',
+    media: [
+      { type: 'image', src: '/interests/drawing/anika.png', caption: 'Anika Drawing' },
+      { type: 'image', src: '/interests/drawing/eye-pastel.png', caption: 'Eye Pastel Drawing' },
+      { type: 'image', src: '/interests/drawing/lola.png', caption: 'Lola Drawing' },
+    ],
+  },
+  {
+    label: 'Vibing to Music', image: '/gallery/assets/Music.jpg', emoji: '🎵', action: 'music',
+  },
+  {
+    label: 'Gaming', image: '/gallery/assets/Gaming.jpg', emoji: '🎮', action: 'interest',
+    media: [
+      { type: 'image', src: '/interests/gaming/valorant.jfif', caption: 'Valorant' },
+      { type: 'image', src: '/interests/gaming/chess.jfif', caption: 'Chess.com' },
+      { type: 'image', src: '/interests/gaming/8ball-pool.png', caption: '8 Ball Pool' },
+      { type: 'image', src: '/interests/gaming/tetris.jfif', caption: 'Tetris' },
+    ],
+  },
 ]
 
 function handleClick(item) {
   if (item.action === 'music') {
     emit('open-music')
+  } else if (item.action === 'interest') {
+    emit('open-interest', item)
   }
 }
 </script>
